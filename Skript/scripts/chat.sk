@@ -1,0 +1,9 @@
+on chat:
+    if player has permission "owner":
+        set chat format to "&b[Owner] &f%player% : %message%"
+    else if player has permission "youtuber":
+        set chat format to "&1&l[Dark&5&lOverlord] &f%player% : %message%"
+    else if player has permission "admin":
+        set chat format to "&6[Admin] &f%player% : %message%"
+    else:
+        set chat format to "&7[Players] &f%player% : %message%"
