@@ -1,0 +1,134 @@
+#
+# chat wheel from dota 2 project
+# lol austophia
+#
+
+variables:
+  {chatwheel.%player%.cd} = 0
+
+options:
+	0: not set KEKW /cwhelp for help
+	1: 10억짜리 꿈의 고리!
+	2: Lakad Matataaag! Normalin, Normalin.
+	3: The next level play!
+	4: 这波不亏, 666
+	5: Absolutely Perfect!
+	6: 毁天灭地, NICE啊！
+	7: А ну-ка иди-ка сюда. А вот все. Все.
+	8: Ceeeeeeeeeb!
+	9: Orchestra Hit
+	10: It's looking Spicy!
+	11: Sad trombone
+	12: Zeus Ult Now!
+	13: Good game, well played
+
+command /cwhelp:
+  executable by: players
+  trigger:
+    message "&e-------- &bCuna&a's Chat Wheel for Skript &e------------------"
+    message "&6/cwlist: &fLists all chat wheel options' ID and message."
+    message "&6/cwslots: &fLists your current chat wheel."
+    message "&6/cwset <SLOT> <ID>: &fCustomise your chat wheel."
+    message "&6/cwtool <SLOT>: &fSummons a tool to broadcast a chat wheel message."
+    message "&6/cw <SLOT>: &fBroadcasts a chat wheel message."
+
+#bruh
+command /cwreload:
+  executable by: players
+  trigger:
+    set {chatwheel.opti.1} to "{@1}"
+    set {chatwheel.opti.2} to "{@2}"
+    set {chatwheel.opti.3} to "{@3}"
+    set {chatwheel.opti.4} to "{@4}"
+    set {chatwheel.opti.5} to "{@5}"
+    set {chatwheel.opti.6} to "{@6}"
+    set {chatwheel.opti.7} to "{@7}"
+    set {chatwheel.opti.8} to "{@8}"
+    set {chatwheel.opti.9} to "{@9}"
+    set {chatwheel.opti.10} to "{@10}"
+    set {chatwheel.opti.11} to "{@11}"
+    set {chatwheel.opti.12} to "{@12}"
+    set {chatwheel.opti.13} to "{@13}"
+
+command /cwlist:
+    description: lists the IDs of chat wheel messages.
+    aliases: chatwheellist
+    executable by: players
+    trigger:
+        message "&e----- &aChat Wheel Options &7[<ID>: <MESSAGE>] &e-----"
+        message "&61: &f{@1}"
+        message "&62: &f{@2}"
+        message "&63: &f{@3}"
+        message "&64: &f{@4}"
+        message "&65: &f{@5}"
+        message "&66: &f{@6}"
+        message "&67: &f{@7}"
+        message "&68: &f{@8}"
+        message "&69: &f{@9}"
+        message "&610: &f{@10}"
+        message "&611: &f{@11}"
+        message "&612: &f{@12}"
+        message "&613: &f{@13}"
+
+command /cwset <number> <number>:
+	executable by: players
+	trigger:
+		set {chatwheel.%player%.%arg 1%} to arg 2
+		message "&aChat wheel slot &6%arg 1% is now set to &f%{chatwheel.opti.%arg 2%}%"
+
+command /cwslots:
+  description: Lists your chat wheel slots.
+  aliases: chatwheelslots
+  executable by: players
+  trigger:
+    message "&e----- &b%player%&a's Chat Wheel &e-----"
+    loop 5 times:
+      if {chatwheel.%player%.%loop-number%} is set:
+        execute player command "/cwreturn %loop-number% %{chatwheel.%player%.%loop-number%}%"
+      else:
+        message "&6%loop-number%: &f{@0}"
+
+command /cwreturn <number> <number>:
+  executable by: players
+  trigger:
+    message "&6%arg 1%: &f%{chatwheel.opti.%arg 2%}%"
+
+command /cw <number>:
+  description: Broadcast a chat wheel message.
+  executable by: players
+  trigger:
+    if {chatwheel.%player%.%arg 1%} is set:
+      execute player command "/asdfbr %{chatwheel.%player%.%arg 1%}%"
+    else:
+      message "{@0}"
+
+command /asdfbr <number>:
+  executable by: players
+  trigger:
+    set {_cd} to difference between {chatwheel.%player%.cdtime} and now
+    if {_cd} is less than 5 seconds:
+      message "&cYour chat wheel is on cooldown! Please wait %difference between 5 seconds and {_cd}%&c."
+    else if {chatwheel.%player%.cd} is equal to 0:
+      broadcast "&b%player%&e > %{chatwheel.opti.%arg 1%}%"
+      add 1 to {chatwheel.%player%.cd}
+    else if {chatwheel.%player%.cd} is equal to 1:
+      broadcast "&b%player%&e > %{chatwheel.opti.%arg 1%}%"
+      set {chatwheel.%player%.cdtime} to now
+      set {chatwheel.%player%.cd} to 0
+
+command /cwtool <number>:
+  cooldown: 5 seconds
+  cooldown message: &cPlease wait %remaining time% before summoning a tool again.
+  executable by: players
+  trigger:
+    give skull of player named "Chat Wheel %arg 1%" to player
+
+on place:
+  name of player's held item contains "Chat Wheel"
+  cancel event
+
+on right click:
+  name of player's held item contains "Chat Wheel"
+  loop 5 times:
+    if name of player's held item contains "%loop-number%":
+      execute player command "/cw %loop-number%"
