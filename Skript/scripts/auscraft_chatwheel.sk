@@ -21,6 +21,7 @@ options:
 	11: Sad trombone
 	12: Zeus Ult Now!
 	13: Good game, well played
+  14: GGWP TQ
 
 command /cwhelp:
   executable by: players
