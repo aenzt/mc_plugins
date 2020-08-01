@@ -1,0 +1,20 @@
+on skript load:
+  set {_i1} to diamond sword named "&aEmerald Sword"
+  set {_i2} to diamond sword of sharpness 1 named "&aPower Sword"
+  set {_i3} to diamond sword of sharpness 5 named "&bSuper Sharp Sword"
+  set {_i4} to rabbit stew named "&aRamen"
+
+  register new shaped recipe for {_i1} using air, emerald, air, air, emerald, air, air, stick and air with id "emerald_sword" in group "custom_swords"
+  register new shaped recipe for {_i2} using air, emerald, air, air, emerald, air, air, {_i1} and air with id "power_sword" in group "custom_swords"
+  register new shaped recipe for {_i3} using air, emerald, air, air, emerald, air, air, {_i2} and air with id "super_sharp_sword" in group "custom_swords"
+  register new shaped recipe for {_i4} using wheat, wheat, wheat, chicken, egg, chicken, air, bowl and air with id "Ramen_food" in group "custom_food"
+
+on consume:
+  name of player's held item contains "&aRamen"
+  apply regeneration to the player for 15 seconds
+
+
+
+# apply [potion of] %potioneffecttypes% [potion] [[[of] tier] %number%] to %livingentities% [for %timespan%] [(replacing [the] existing effect)]
+# apply ambient [potion of] %potioneffecttypes% [potion] [[[of] tier] %number%] to %livingentities% [for %timespan%] [(replacing [the] existing effect)]
+# apply [potion of] %potioneffecttypes% [potion] [[[of] tier] %number%] without [any] particles to %livingentities% [for %timespan%] [(replacing [the] existing effect)]

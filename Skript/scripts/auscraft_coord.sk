@@ -1,0 +1,27 @@
+variables:
+  {coord.%player%.loc_a} = 0
+  {coord.%player%.loc_b} = 0
+  {coord.%player%.loc_c} = 0
+  {coord.%player%.loc_d} = 0
+  {coord.%player%.loc_e} = 0
+
+options:
+  1: {coord.%player%.loc_a}
+  2: {coord.%player%.loc_b}
+  3: {coord.%player%.loc_c}
+  4: {coord.%player%.loc_d}
+  5: {coord.%player%.loc_e}
+
+on death of player:
+  set {death.%player%.location} to location of player
+  message "You dead, location set to %location of player%"
+
+command /deathtp:
+  executable by: players
+  trigger:
+    teleport player to {death.%player%.location}
+
+command /setloc:
+  executable by: players
+  trigger:
+    if

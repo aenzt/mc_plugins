@@ -1,0 +1,106 @@
+# ###############################################################################
+# Discord Bot Skript example by Blueyescat
+#
+# Includes a good evaluate system.
+#
+# Requires Vixio and TuSKe Skript addons
+# ###############################################################################
+
+options:
+	# Bot Token
+	#
+	# Get token of your bot from https://discordapp.com/developers
+	token: "NzMyNzM1Nzk3MTQ4NjQ3NDM0.Xw47Yw.qc-i3-m8mfibLgeHVluN-MWimws"
+
+	# Not important to change (not the user name of the bot in Discord) and both values must be the same
+	bot: "Flankers Craft"
+	botName: Flankers Craft
+
+	# Command Prefixes
+	#
+	# If you want to use emojis in command prefixes, get unicode character of these emojis from: https://emojipedia.org
+	# For example :apple: in Discord: "🍎"
+	#
+	# If you want to use mention tag of your bot as command prefix use: <@id>
+	prefixes: <@id>
+
+	# 18 digit Discord IDs of admin users
+	# For more than one admin you must use "or" instead of "and" on the list.
+	admins: "136330560187400202", "255535407628943360" or "199044714568089601"
+	channeliid: "732763516636889179"
+
+on load:
+	if {@bot} parsed as bot is not set:
+		login to {@token} with name {@bot}
+	set status of {@bot} to online
+
+on unload:
+	set status of {@bot} to do not disturb
+
+command /discordtest:
+	trigger:
+		send "```test message```" to channel with id {@channeliid} with {@bot}
+
+on connect:
+	send "```%player% connnecting```" to channel with id {@channeliid} with {@bot}
+
+on quit:
+	send "```%player% Exiting```" to channel with id {@channeliid} with {@bot}
+
+on server stop:
+	send "Server Restarting, Please Wait" to channel with id {@channeliid} with {@bot}
+
+on skript start:
+	send "Server Is Up" to channel with id {@channeliid} with {@bot}
+
+# discord command evaluate <text>:
+# 	aliases: eval
+# 	prefixes: {@prefixes}
+# 	bots: {@botName}
+# 	trigger:
+# 		if discord id of event-user is {@admins}:
+# 			set {_code} to regex replace "^\s+" with "" in arg-1
+# 			if first 3 characters of {_code} is "```":
+# 				if last 3 characters of {_code} is "```":
+# 					if first 5 characters of {_code} is "```vb": # VB.Net syntax highlighting support on code blocks
+# 						set {_code} to subtext of {_code} from character 7 to (length of {_code} - 3)
+# 					else:
+# 						set {_code} to subtext of {_code} from character 4 to (length of {_code} - 3)
+# 				else:
+# 					create embed:
+# 						set description of the embed to ":x: Invalid code block!"
+# 						set color of the embed to color from rgb 255, 0, 0
+# 					reply with the last created embed
+# 					stop
+#
+# 			evaluate logging in {_errors::*}: {_code}
+# 			if {_errors::*} is set:
+# 				loop {_errors::*}:
+# 					set {_parse::*} to loop-value parsed as "%text% \(TuSKe\/evaluate.sk, line %integer%\: %text%'\)"
+# 					add "**Line %{_parse::2}%:** *%{_parse::1}%*%nl%**>** ``%{_parse::3}%``" to {_lines::*}
+# 				create embed:
+# 					set title of the embed to ":x: Evaluate Errors (%size of {_errors::*}%)"
+# 					set description of the embed to join {_lines::*} with new line
+# 					set color of the embed to color from rgb 255, 0, 0
+# 				reply with the last created embed
+# 		else:
+# 			reply with ":x: Only administrators can use this command!"
+#
+# discord command purge <text>:
+# 	aliases: purgemessages, clear, clearmessages
+# 	prefixes: {@prefixes}
+# 	executable in: guild
+# 	bots: {@botName}
+# 	trigger:
+# 		if discord id of event-user is {@admins}:
+# 			set {_count} to arg-1 parsed as number
+# 			if {_count} is greater than 0:
+# 				grab the last {_count} messages in event-channel
+# 				purge the grabbed messages with event-bot
+# 				reply with ":white_check_mark: Successfully purged %{_count}% message%(""s"") if {_count} is greater than 1, else """"%!" and store the message in {_message}
+# 				wait 2 seconds
+# 				delete random message of {_message} with event-bot
+# 			else:
+# 				reply with ":x: Usage:  **%used prefix%**%used command% **<**a positive number**>**"
+# 		else:
+# 			reply with ":x: Only administrators can use this command!"

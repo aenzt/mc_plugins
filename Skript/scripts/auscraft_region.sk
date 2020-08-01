@@ -1,5 +1,0 @@
-on region enter:
-    message "entering %region%"
-
-on region exit:
-    message "leaving %region%"

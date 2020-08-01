@@ -2,6 +2,6 @@ command /killstat:
     trigger:
         set name of sidebar of player to "&6Kill Stats!"
         set score "Players : %player%" in sidebar of player to 1
-        set score "I'm first" in sidebar of player to 0
+        set score "I'm first!" in sidebar of player to 0
         wait 10 seconds
         wipe player's sidebar
