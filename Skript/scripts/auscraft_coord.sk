@@ -24,4 +24,3 @@ command /deathtp:
 command /setloc:
   executable by: players
   trigger:
-    if
