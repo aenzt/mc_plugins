@@ -11,14 +11,26 @@ variables:
 
 on death of player:
 	attacker is a player
-	add 1 to {kill counter.%attacker%.kills_total}
-	add 1 to {kill counter.%attacker%.kills_session}
-	{kill counter.%attacker%.kills_session} is greater than {kill counter.%attacker%.kills_session_max}:
-		set {kill counter.%attacker%.kills_session_max} to {kill counter.%attacker%.kills_session}
+	add 1 to {kill counter.%attacker%.kills_total.0} # 0 = season 0, nanti pas season 1 ganti jadi 1, season 2 jadi 2, dst.
+	add 1 to {kill counter.%attacker%.kills_session.0}
+	{kill counter.%attacker%.kills_session.0} is greater than {kill counter.%attacker%.kills_session_max.0}:
+		set {kill counter.%attacker%.kills_session_max.0} to {kill counter.%attacker%.kills_session.0
+	loop 5 times:
+		if {top.%loop-number%} isn't set:
+			set {top.%loop-number%} to attacker
+			set {topkillsession.%loop-number%} to {kill counter.%attacker%.kills_session_max.0}
+			set {topkill.%loop-number%} to {kill counter.%attacker%.kills_total.0}
+			exit 1 loop
+	loop 5 times:
+		if {kill counter.%attacker%.kills_total.0} is greater than {topkill.%loop-number%}:
+			set {top.%loop-number%} to attacker
+			set {topkillsession.%loop-number%} to {kill counter.%attacker%.kills_session_max.0}
+			set {topkill.%loop-number%} to {kill counter.%attacker%.kills_total.0}
+			exit 1 loop
 	execute attacker command "/kills"
 
 on death of player:
-	set {kill counter.%player%.kills_session} to 0
+	set {kill counter.%player%.kills_session.0} to 0
 
 command /kills:
 	executable by: players
@@ -27,11 +39,23 @@ command /kills:
 			wipe player's sidebar
 			wait 1 tick
 			set name of sidebar of player to "&6Kill Stats"
-			set score "Total Kills: %{kill counter.%player%.kills_total}% Kills" in sidebar of player to 1
-			set score "Session Kills: %{kill counter.%player%.kills_session}% Kills" in sidebar of player to 0
+			set score "Total Kills: %{kill counter.%player%.kills_total.0}% Kills" in sidebar of player to 1
+			set score "Session Kills: %{kill counter.%player%.kills_session.0}% Kills" in sidebar of player to 0
 			wait 10 seconds
+			wipe player's sidebar #ini penting >:(
 
 command /clearkills:
-    executable by: players
-    trigger:
-        wipe player's sidebar
+  executable by: players
+  trigger:
+      wipe player's sidebar
+
+command /killstop [<number>]:
+	executable by: players
+	trigger:
+		if %arg 1% is set:
+			message "&e----- &aSeason &6%arg 1% &aTop Kills Leaderboard &e-----"
+			loop 5 times:
+				message "&e%loop-number%&e: &6%{top.%loop-number%}% &aat &6%{topkill.%loop-number%}% &6kills &awith a &6%{topkillsession.%loop-number%}% &amaximum killstreak."
+		else:
+			execute player command "/killstop 0"
+		
