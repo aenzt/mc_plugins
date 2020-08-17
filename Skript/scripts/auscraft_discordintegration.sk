@@ -41,6 +41,10 @@ command /discordtest:
 	trigger:
 		send "```test message```" to channel with id {@channeliid} with {@bot}
 
+command /senddiscord <text>:
+	trigger:
+		send "%argument%" to channel with id {@channeliid} with {@bot}
+
 on connect:
 	send "```%player% connnecting```" to channel with id {@channeliid} with {@bot}
 
